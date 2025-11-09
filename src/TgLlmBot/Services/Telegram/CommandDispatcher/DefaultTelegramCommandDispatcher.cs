@@ -41,7 +41,6 @@ public class DefaultTelegramCommandDispatcher : ITelegramCommandDispatcher
             return;
         }
 
-
         switch (message.Text)
         {
             case "!help":
