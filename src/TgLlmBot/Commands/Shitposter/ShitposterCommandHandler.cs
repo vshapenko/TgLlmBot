@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.AI;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
+using TgLlmBot.CommandDispatcher.Abstractions;
 using TgLlmBot.DataAccess.Models;
 using TgLlmBot.Services.DataAccess;
-using TgLlmBot.Services.Telegram.CommandDispatcher.Abstractions;
 using TgLlmBot.Services.Telegram.Markdown;
 
 namespace TgLlmBot.Commands.Shitposter;
