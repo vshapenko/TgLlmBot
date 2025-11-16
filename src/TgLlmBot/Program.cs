@@ -78,6 +78,7 @@ public partial class Program
                 LogGotSelfInformationSuccessful(logger);
                 botClient.OnMessage += requestHandler.OnMessageAsync;
                 botClient.OnError += requestHandler.OnErrorAsync;
+                botClient.OnUpdate += requestHandler.OnUpdateAsync;
                 await host.RunAsync(CancellationToken.None);
             }
         }
@@ -236,6 +237,7 @@ public partial class Program
                 });
         });
         builder.Services.AddSingleton<ITelegramMessageStorage, DefaultTelegramMessageStorage>();
+        builder.Services.AddSingleton<ITelegramKickedUsersStorage, DefaultTelegramKickedUsersStorage>();
         // MCP
         builder.Services.AddSingleton<DefaultMcpToolsProvider>();
         builder.Services.AddSingleton<IMcpToolsProvider>(resolver => resolver.GetRequiredService<DefaultMcpToolsProvider>());

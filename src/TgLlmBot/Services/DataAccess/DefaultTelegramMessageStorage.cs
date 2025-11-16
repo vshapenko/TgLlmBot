@@ -96,10 +96,16 @@ public class DefaultTelegramMessageStorage : ITelegramMessageStorage
                                      ORDER BY "Date" DESC
                                      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
                                      ) as cumulative_length
-                             FROM public."ChatHistory"
+                             FROM public."ChatHistory" ch
                              WHERE "ChatId" = @chatId
                                AND "Date" <= (SELECT cutoff_date FROM target_message)
                                AND "MessageId" != @messageId
+                               AND NOT EXISTS (
+                                    SELECT 1
+                                    FROM public."KickedUsers" k
+                                    WHERE k."ChatId" = ch."ChatId"
+                                      AND k."Id" = ch."FromUserId"
+                               )
                              ORDER BY "Date" DESC
                              LIMIT 200
                          ) as subquery
@@ -116,7 +122,6 @@ public class DefaultTelegramMessageStorage : ITelegramMessageStorage
 
         return resultAccumulator.ToArray();
     }
-
 
     private static DbChatMessage CreateDbChatMessage(Message message, User self)
     {

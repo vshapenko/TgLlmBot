@@ -10,4 +10,5 @@ public interface ITelegramRequestHandler
 {
     Task OnMessageAsync(Message message, UpdateType type);
     Task OnErrorAsync(Exception exception, HandleErrorSource source);
+    Task OnUpdateAsync(Update update);
 }

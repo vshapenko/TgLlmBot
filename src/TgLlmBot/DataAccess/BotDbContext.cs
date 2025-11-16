@@ -14,10 +14,13 @@ public class BotDbContext : DbContext
 
     public DbSet<DbChatMessage> ChatHistory { get; set; }
 
+    public DbSet<KickedUser> KickedUsers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
         modelBuilder.ApplyConfiguration(new DbChatMessageEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new KickedUserEntityTypeConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }
