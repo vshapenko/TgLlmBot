@@ -50,6 +50,7 @@ public class DisplayHelpCommandHandler : AbstractCommandHandler<DisplayHelpComma
         builder.AppendLine("`!model` - отображает текущую используемую LLM и endpoint к которому идут обращения");
         builder.AppendLine("`!repo` - ссылка на GitHub репозиторий с исходным кодом бота");
         builder.AppendLine("`!usage` - статистика использования API ключа");
+        builder.AppendLine("`!shitposter` - показывает рейтинг самых активных пользователей в чате");
         var rawMarkdown = builder.ToString();
         var optimizedMarkdown = markdownConverter.ConvertToTelegramMarkdown(rawMarkdown);
         return optimizedMarkdown;

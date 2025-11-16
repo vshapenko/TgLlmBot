@@ -27,6 +27,7 @@ using TgLlmBot.Commands.DisplayHelp;
 using TgLlmBot.Commands.Model;
 using TgLlmBot.Commands.Ping;
 using TgLlmBot.Commands.Repo;
+using TgLlmBot.Commands.Shitposter;
 using TgLlmBot.Commands.Usage;
 using TgLlmBot.Configuration.Options;
 using TgLlmBot.Configuration.TypedConfiguration;
@@ -167,6 +168,7 @@ public partial class Program
         builder.Services.AddSingleton<PingCommandHandler>();
         builder.Services.AddSingleton<RepoCommandHandler>();
         builder.Services.AddSingleton<UsageCommandHandler>();
+        builder.Services.AddSingleton<ShitposterCommandHandler>();
         // Channel to communicate with LLM
         var llmRequestChannel = Channel.CreateBounded<ChatWithLlmCommand>(new BoundedChannelOptions(20)
         {
