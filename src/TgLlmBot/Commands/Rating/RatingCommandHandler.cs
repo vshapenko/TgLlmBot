@@ -159,8 +159,10 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
                 messageScore += 10;
             }
 
-            // All caps (excluding short messages)
-            if (text.Length > 5 && text.Count(char.IsUpper) > text.Length * 0.7)
+            // All caps (excluding short messages) - works for both Latin and Cyrillic
+            var uppercaseCount = text.Count(c => char.IsUpper(c) || (c >= 'А' && c <= 'Я'));
+            var letterCount = text.Count(c => char.IsLetter(c));
+            if (letterCount > 5 && uppercaseCount > letterCount * 0.7)
             {
                 messageScore += 20;
             }
@@ -170,6 +172,20 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
             {
                 messageScore += 15;
             }
+
+            // Common Russian shitpost words/phrases
+            var lowerText = text.ToLowerInvariant();
+            string[] russianShitpostWords = [
+                "лол", "кек", "пепе", "жиза", "жесть", "угар", "ору", "ржу", "орнул",
+                "кринж", "краш", "агонь", "ахуе", "збс", "топ", "база", "кек чебурек",
+                "бомбит", "триггер", "рофл", "лул", "лмао", "пон", "хз", "имхо", "кмк",
+                "азаза", "ахах", "ебать", "бля", "пздц", "епт", "ога", "пффф", "ясно",
+                "++", "---", "тру", "го", "го го", "не", "ок", "окей", "найс", "гг"
+            ];
+
+            var matchedWords = russianShitpostWords.Count(word =>
+                lowerText.Contains(word, StringComparison.Ordinal));
+            messageScore += matchedWords * 10;
 
             totalScore += Math.Min(messageScore, 100); // Cap at 100 per message
             scoredMessages++;
@@ -182,8 +198,18 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
     {
         var lower = text.ToLowerInvariant();
 
-        // Check for repeated sequences
-        string[] patterns = ["ha", "he", "xa", "lo", "ke", "ах", "ха", "хе"];
+        // Check for repeated sequences (English and Russian)
+        string[] patterns = [
+            // English
+            "ha", "he", "lo", "ke",
+            // Russian laughter
+            "ха", "хе", "хи", "хо", "ах", "ух", "эх", "ох",
+            // Russian shitpost patterns
+            "бля", "лол", "кек", "пфф", "ого", "вау", "жиза", "агa", "ага",
+            // Repetitive sounds
+            "ыы", "аа", "оо", "ее", "уу"
+        ];
+
         foreach (var pattern in patterns)
         {
             var count = 0;
@@ -194,7 +220,7 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
                 index += pattern.Length;
             }
 
-            if (count >= 3) // "hahaha" or more
+            if (count >= 3) // "хахаха" or more
             {
                 return true;
             }
@@ -223,22 +249,25 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
         }
 
         var prompt = $"""
-                      Analyze these messages and rate the "shitposting quality" from 0-100.
+                      Проанализируй эти сообщения и оцени "качество шитпостинга" по шкале от 0 до 100.
 
-                      Shitposting indicators:
-                      - Memes, jokes, sarcasm, humor
-                      - Low-effort content
-                      - Non-serious messages
+                      Признаки шитпостинга:
+                      - Мемы, шутки, сарказм, юмор, ирония
+                      - Низкокачественный контент, флуд
+                      - Несерьёзные сообщения, троллинг
+                      - Стёб, приколы, "угар"
+                      - Спам эмодзи, капслок
+                      - Бессмысленные или провокационные реплики
 
-                      Messages:
+                      Сообщения:
                       {sampleBuilder}
 
-                      Respond with ONLY a number from 0-100, where:
-                      - 0 = serious, high-quality discussion
-                      - 50 = mix of serious and jokes
-                      - 100 = pure shitposting/memes
+                      Ответь ТОЛЬКО числом от 0 до 100, где:
+                      - 0 = серьёзное, качественное обсуждение
+                      - 50 = смесь серьёзного и шуток
+                      - 100 = чистый шитпостинг/мемы
 
-                      Your response (number only):
+                      Твой ответ (только число):
                       """;
 
         try
