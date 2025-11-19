@@ -180,7 +180,7 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
                 "кринж", "краш", "агонь", "ахуе", "збс", "топ", "база", "кек чебурек",
                 "бомбит", "триггер", "рофл", "лул", "лмао", "пон", "хз", "имхо", "кмк",
                 "азаза", "ахах", "ебать", "бля", "пздц", "епт", "ога", "пффф", "ясно",
-                "++", "---", "тру", "го", "го го", "не", "ок", "окей", "найс", "гг"
+                "++", "тру", "го", "го го", "не", "ок", "окей", "найс", "гг"
             ];
 
             var matchedWords = russianShitpostWords.Count(word =>
@@ -205,7 +205,7 @@ public partial class RatingCommandHandler : AbstractCommandHandler<RatingCommand
             // Russian laughter
             "ха", "хе", "хи", "хо", "ах", "ух", "эх", "ох",
             // Russian shitpost patterns
-            "бля", "лол", "кек", "пфф", "ого", "вау", "жиза", "агa", "ага",
+            "бля", "лол", "кек", "пфф", "ого", "вау", "жиза", "ага",
             // Repetitive sounds
             "ыы", "аа", "оо", "ее", "уу"
         ];
